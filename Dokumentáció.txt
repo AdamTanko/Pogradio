@@ -1,0 +1,45 @@
+Pogradio App.
+
+Futtatás előtt:
+ Az adatbázis létrehozáséhoz lekell futattni a "pogradio\sql\pogradio.sql" fájlt.
+ A "pogradio\src\main\resources\application.properties" fájlban lévő adatokat szükség szerint változtatni kell.
+
+Futtatás:
+ A "pogradioApplication.java" fájlt futtassuk mint Java Application.
+ A műsorvezető, műsor, műsor idő és a lejátszási listával Postmanben vagy curllel tudunk dolgozni.
+
+Metódusok:
+ Műsortvezető.add(nev, leiras, kep)
+  Létre hoz egy új műsorvezetőt nev, leiras, kep paraméterekkel az adatbázisban.
+ Műsortvezető.getById(id)
+  Megkeresi az adatbázisban az "id" alatt lévő műsorvezetőt és vissza adja.
+ Műsortvezető.getAll()
+  Vissza adja az adatbázisban az összes Műsortvezetőt.
+ Műsortvezető.update(m)
+  Megváltoztatja az "m.id" alatt lévő "a" Műsortvezető adatait az "m" adataira.
+ Műsortvezető.delete(id)
+  Az "id" alatt lévő Műsortvezető-t kitörli
+ 
+ Műsor.add(cim, leiras, musorvezetoid)
+  Létrehoz egy új Műsort cim, leiras, musorvezetoid paraméterekkel az adatbázisban.
+  A musorvezetoid csakis létező műsorvezető id-ja lehet.
+ Műsor.getById(id)
+  Megkeresi az adatbázisban az "id" alatt lévő műsort és vissza adja.
+ Műsor.getAll()
+  Vissza adja az adatbázisban az összes Műsor-t.
+ Műsor.update(m)
+  Megváltoztatja az "m.id" alatt lévő "a" Műsor adatait az "m" adataira.
+ Műsor.delete(id)
+  Az "id" alatt lévő Műsor-t kitörli
+
+ MűsorIdő.add(nap, startido, endido, musorid)
+  Létrehoz egy új MűsorIdőt nap, startido, endido, musorid paraméterekkel az adatbázisban.
+  A musorid csakis létező műsor id-ja lehet.
+ MűsorIdő.getById(id)
+  Megkeresi az adatbázisban az "id" alatt lévő műsoridőt és vissza adja.
+ MűsorIdő.getAll()
+  Vissza adja az adatbázisban az összes MűsorIdő-t.
+ MűsorIdő.update(m)
+  Megváltoztatja az "m.id" alatt lévő "a" MűsorIdő adatait az "m" adataira.
+ MűsorIdő.delete(id)
+  Az "id" alatt lévő MűsorIdő-t kitörli
