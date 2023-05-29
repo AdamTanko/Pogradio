@@ -20,10 +20,10 @@ public class Show {
 
     }
 
-    public Show(String title, String leiras, Long musorvezetoid) {
+    public Show(String title, String description, Long showrunnerid) {
         this.title = title;
-        this.description = leiras;
-        this.showrunnerid = musorvezetoid;
+        this.description = description;
+        this.showrunnerid = showrunnerid;
     }
 
     public Long getId() {
