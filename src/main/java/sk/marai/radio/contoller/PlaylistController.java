@@ -93,12 +93,12 @@ public class PlaylistController
             FileWriter myWriter = new FileWriter(f);
             for (Zene z:
                  playlistarray) {
-                String zene = z.title + "," + z.artist + "," + z.album + "," + z.year + "," + z.duration+ ",";
+                StringBuilder zene = new StringBuilder(z.title + "," + z.artist + "," + z.album + "," + z.year + "," + z.duration + ",");
                 for (int i = 0; i < z.tags.length; i++) {
-                    zene += z.tags[i]+ ";";
+                    zene.append(z.tags[i]).append(";");
                 }
-                zene += "\n";
-                myWriter.write(zene);
+                zene.append("\n");
+                myWriter.write(zene.toString());
                 d++;
                 if (d == x) {
                     break;
