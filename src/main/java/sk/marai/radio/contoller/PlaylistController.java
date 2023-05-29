@@ -13,16 +13,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 @Controller
 @RequestMapping("/playlist")
 
-public class PlaylistController
-{
+public class PlaylistController {
 
-    private static class Zene
-    {
+    private static class Music {
         public String title;
         public String artist;
         public String album;
@@ -31,47 +30,45 @@ public class PlaylistController
         public String[] tags;
     }
 
-    public static ArrayList<Zene> zenek = new ArrayList<>();
+    public static ArrayList<Music> musicArrayList = new ArrayList<>();
 
 
-    public void beolv()
-    {
+    public void parseInput() {
         try {
-            System.out.println("Beolvasás");
-            File f = new File("docs/zenek.csv");
+            System.out.println("Reading");
+            File f = new File("docs/zenek.csv"); // filepath to file containing the list of music available
             Scanner sc2 = new Scanner(f);
             sc2.nextLine();
             while (sc2.hasNextLine()) {
                 String scnextlinestring = sc2.nextLine();
                 Scanner sc = new Scanner(scnextlinestring).useDelimiter(",");
-                Zene z = new Zene();
+                Music z = new Music();
                 z.title = sc.next();
                 z.artist = sc.next();
                 z.album = sc.next();
                 z.year = Integer.parseInt(sc.next());
                 z.duration = Long.parseLong(sc.next());
                 z.tags = sc.next().split(";");
-                 zenek.add(z);
+                musicArrayList.add(z);
                 sc.close();
             }
-            System.out.println("Beolvasva");
+            System.out.println("Reading complete");
             sc2.close();
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
 
     @GetMapping("/generate/{tagtogenerateby}/{howmanysongs}")
-    public @ResponseBody String generateplaylist(@PathVariable String tagtogenerateby,@PathVariable long howmanysongs) {
+    public @ResponseBody String generateplaylist(@PathVariable String tagtogenerateby, @PathVariable long howmanysongs) {
 
-        if (zenek.size() == 0) {
-            beolv();
+        if (musicArrayList.size() == 0) {
+            parseInput();
         }
-        ArrayList<Zene> playlistarray = new ArrayList<>();
-        //tagek szerinti kereses
-        for (Zene z : zenek) {
+        ArrayList<Music> playlistarray = new ArrayList<>();
+        // search based on tag (got from the path)
+        for (Music z : musicArrayList) {
             for (int i = 0; i < z.tags.length; i++) {
                 if (z.tags[i].equals(tagtogenerateby)) {
                     playlistarray.add(z);
@@ -79,92 +76,91 @@ public class PlaylistController
                 }
             }
         }
-        //filenev megadasa
+        //generate filename (just the current date and time)
+        String formattedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm"));
+        //file creation
         long x = Math.min(howmanysongs, playlistarray.size());
-        LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm");
-        String formattedDate = myDateObj.format(myFormatObj);
-        //file keszites
+
         String filenev = tagtogenerateby + "-" + x + "-" + formattedDate;
-        File f = new File("Playlists/" +filenev + ".txt");
-        //iras a fileba
+        File f = new File("Playlists/" + filenev + ".txt");
+        //writing to the file
         int d = 0;
         try {
-            FileWriter myWriter = new FileWriter(f);
-            for (Zene z:
-                 playlistarray) {
-                StringBuilder zene = new StringBuilder(z.title + "," + z.artist + "," + z.album + "," + z.year + "," + z.duration + ",");
+            FileWriter fw = new FileWriter(f);
+            for (Music z :
+                    playlistarray) {
+                StringBuilder music = new StringBuilder(z.title + "," + z.artist + "," + z.album + "," + z.year + "," + z.duration + ",");
                 for (int i = 0; i < z.tags.length; i++) {
-                    zene.append(z.tags[i]).append(";");
+                    music.append(z.tags[i]).append(";");
                 }
-                zene.append("\n");
-                myWriter.write(zene.toString());
+                music.append("\n");
+                fw.write(music.toString());
                 d++;
                 if (d == x) {
                     break;
                 }
             }
-            myWriter.close();
+            fw.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
-            System.out.println("Hiba tortent.");
+            System.out.println("An error occurred");
             e.printStackTrace();
         }
-        return "Sikeresen lett generalva a '" + filenev + "' lejatszasilista.";
+        return "Succesfully generated the '" + filenev + "' playlist.";
     }
 
     @GetMapping("/all")
-    public @ResponseBody Iterable<Zene> getAllZene() {
-        if (zenek.size() == 0) {
-            beolv();
+    public @ResponseBody Iterable<Music> getAllMusic() {
+        if (musicArrayList.size() == 0) {
+            parseInput();
         }
-        return zenek;
+        return musicArrayList;
     }
 
-    @GetMapping("/findby/{coulmnnumber}/{searchquery}")
-    public @ResponseBody Iterable<Zene> getby(@PathVariable int coulmnnumber, @PathVariable String searchquery) {
-        if (zenek.size() == 0) {
-            beolv();
+    @GetMapping("/findby/{columnnumber}/{searchquery}")
+    public @ResponseBody Iterable<Music> getby(@PathVariable int columnnumber, @PathVariable String searchquery) {
+        if (musicArrayList.size() == 0) {
+            parseInput();
         }
-        ArrayList<Zene> finalarray = new ArrayList<>();
-        switch (coulmnnumber){
+        ArrayList<Music> finalarray = new ArrayList<>();
+        switch (columnnumber) {
             case 1:
-                for (Zene z : zenek) {
+                for (Music z : musicArrayList) {
                     if (z.title.contains(searchquery)) {
                         finalarray.add(z);
                     }
                 }
                 break;
             case 2:
-                for (Zene z : zenek) {
+                for (Music z : musicArrayList) {
                     if (z.artist.equals(searchquery)) {
                         finalarray.add(z);
                     }
                 }
                 break;
             case 3:
-                for (Zene z : zenek) {
+                for (Music z : musicArrayList) {
                     if (z.album.equals(searchquery)) {
                         finalarray.add(z);
                     }
                 }
                 break;
             case 4:
-                for (Zene z : zenek) {
+                for (Music z : musicArrayList) {
                     if (z.year == Integer.parseInt(searchquery)) {
                         finalarray.add(z);
                     }
                 }
                 break;
             case 5:
-                for (Zene z : zenek) {
+                for (Music z : musicArrayList) {
                     if (z.duration == Long.parseLong(searchquery)) {
                         finalarray.add(z);
                     }
                 }
                 break;
             case 6:
-                for (Zene z : zenek) {
+                for (Music z : musicArrayList) {
                     for (int i = 0; i < z.tags.length; i++) {
                         if (z.tags[i].equals(searchquery)) {
                             finalarray.add(z);

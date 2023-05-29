@@ -1,0 +1,40 @@
+Pogradio App.
+
+Methods:
+    Showrunner
+        .add(name,description,picture)
+            Creates a showrunner in the database.
+        .getById(id)
+            Gets the showrunner with [Id] from the database.
+        .getAll()
+            Gets all showrunners from the database.
+        .update(m)
+            Updates the showrunner at [m.id] to the details of "m".
+        .delete(id)
+            Deletes the showrunner at [id].
+
+    Show
+        .add(name,description,showrunnerid)
+            Creates a show in the database.
+            [showrunnerid] can only be the id of an existing showrunner.
+        .getById(id)
+            Gets the show with [Id] from the database.
+        .getAll()
+            Gets all shows from the database.
+        .update(m)
+            Updates the show at [m.id] to the details of "m".
+        .delete(id)
+            Deletes the show at [id].
+
+    ShowTime
+        .add(day,starttime,endtime,showid)
+            Creates a showtime in the database.
+            [showid] can only be the id of an existing show.
+        .getById(id)
+            Gets the showtime with [Id] from the database.
+        .getAll()
+            Gets all showtimes from the database.
+        .update(m)
+            Updates the showtime at [m.id] to the details of "m".
+        .delete(id)
+            Deletes the showtime at [id].
