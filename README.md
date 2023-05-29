@@ -9,4 +9,4 @@ This is my submission to the Infoprog 2021 programming contest's first round.
 1. Run pogradio.sql found at sql/pogradio.sql
 2. Run PogradioApplication.java
 
-Documentation can be found at: [Documentation.txt]
+Documentation can be found at: [hun](Dokumentáció.txt), [eng](Documentation.txt)
